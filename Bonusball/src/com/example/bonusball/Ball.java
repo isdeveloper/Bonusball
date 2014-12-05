@@ -22,6 +22,13 @@ public class Ball {
         this.velocityY=vY;  
     }  
     
+    // ready to stop
+    public void changeTarget(float targetX, float targetY) {
+    	this.targetX = targetX;
+    	this.targetY = targetY;
+    }
+    
+    
     public float getRadius()  
     {  
         return radius;  
@@ -60,8 +67,11 @@ public class Ball {
     {  
         this.posY=newY;  
     }  
+    
     public void setVX(float newVX)  
     {  
+    	//如果速度为0 处理一下
+    	
         this.velocityX=newVX;  
     }  
     public void setVY(float newVY)  

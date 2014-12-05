@@ -28,7 +28,7 @@ import com.example.bonusball.hzk.ScreenCal;
 import com.example.bonusball.hzk.ScreenPoint;
 public class BallActivity extends Activity {  
   
-	private final static int BALL_NUM=1;//球的数量
+	private final static int BALL_NUM=100;//球的数量
 	
 	private GestureDetector gd;  //手势监听
 	
@@ -152,20 +152,17 @@ public class BallActivity extends Activity {
         		if(data[i][j]==1)
         		{
         			screenlist.get(i*length+j).setFalg(true);
-//        			System.out.print("■");
+        			System.out.print("■");
         		}
         		else
     			{
         			screenlist.get(i*length+j).setFalg(false);
-//        			System.out.print(" ");
+        			System.out.print(" ");
     			}
 			}
-//        	System.out.print("\n");
+        	System.out.print("\n");
         }
     	myCanvas.formChinese(screenlist);
-	    	
-	    
-		
 		
 	}
     
@@ -220,11 +217,12 @@ public class BallActivity extends Activity {
             //TODO  
 			myCanvas.random_update_ball_speed();
 			Log.i("BallActivity", "onDoubleTap");
+			
             return false;  
         }
 
 		@Override
-		public void onLongPress(MotionEvent event) {//长安
+		public void onLongPress(MotionEvent event) {//长按
 			// TODO Auto-generated method stub
 			super.onLongPress(event);
 //			startGame(str);
@@ -232,6 +230,7 @@ public class BallActivity extends Activity {
 	    	if(str.length()>0)
 			{
 				startGame(str,0);//开始写字
+//	    		myCanvas.readyToStop();
 				index=0;
 //				handler.sendEmptyMessage(0);
 			}
