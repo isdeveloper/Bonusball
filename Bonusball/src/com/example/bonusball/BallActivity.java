@@ -28,7 +28,7 @@ import com.example.bonusball.hzk.ScreenCal;
 import com.example.bonusball.hzk.ScreenPoint;
 public class BallActivity extends Activity {  
   
-	private final static int BALL_NUM=100;//球的数量
+	private final static int BALL_NUM=1;//球的数量
 	
 	private GestureDetector gd;  //手势监听
 	

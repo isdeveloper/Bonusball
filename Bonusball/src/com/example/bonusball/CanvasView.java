@@ -84,7 +84,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
         float randomRadius=mRandom.nextInt(maxBallRadius);  
         float tmpRadius=maxBallRadius/5.0>randomRadius?maxBallRadius:randomRadius;  
        
-//        tmpRadius=maxBallRadius;
+        tmpRadius=maxBallRadius;
         
         float pX=screenWidth * 0.5f; 
         float pY=screenHeight * 0.5f;
