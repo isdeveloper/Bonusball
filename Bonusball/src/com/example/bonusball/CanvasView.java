@@ -86,7 +86,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
         float randomRadius=mRandom.nextInt(maxBallRadius);  
         float tmpRadius=maxBallRadius/5.0>randomRadius?maxBallRadius:randomRadius;  
        
-        tmpRadius=maxBallRadius;
+//        tmpRadius=maxBallRadius;
         
         float pX=screenWidth * 0.5f; 
         float pY=screenHeight * 0.5f;
@@ -187,9 +187,9 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
 		prevMouseX = mouseX;
 		prevMouseY = mouseY;
 		
-		float toDist   = screenWidth * 0.86f;
-		float stirDist = screenWidth * 0.125f;
-		float blowDist = screenWidth * 0.5f;
+		float toDist   = screenHeight * 0.86f;
+		float stirDist = screenHeight * 0.125f;
+		float blowDist = screenHeight * 0.5f;
         
         
         for(Ball b:ballList)  
@@ -206,7 +206,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
         	{
 				dX = x - b.getTargetX();
 				dY = y - b.getTargetY();
-				
         	} 
 			
 			float d  = (float)Math.sqrt(dX * dX + dY * dY);
@@ -225,14 +224,14 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
 			
 			if (d < toDist)
 			{
-				float toAcc = (1 - (d / toDist)) * screenWidth * 0.0014f;
+				float toAcc = (1 - (d / toDist)) * screenHeight * 0.0014f;
 				vX -= dX * toAcc;
 				vY -= dY * toAcc;			
 			}
 			
 			if (d < stirDist)
 			{
-				float mAcc = (1 - (d / stirDist)) * screenWidth * 0.00026f;
+				float mAcc = (1 - (d / stirDist)) * screenHeight * 0.00026f;
 				vX += mouseVX * mAcc;
 				vY += mouseVY * mAcc;			
 			}

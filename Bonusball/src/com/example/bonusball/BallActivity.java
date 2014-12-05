@@ -38,7 +38,7 @@ public class BallActivity extends Activity {
   
     EditText inputEt=null;
     
-    private String str="中";//显示的字
+    private String str="爱";//显示的字
     private int index=0;
     
     private Handler handler;
@@ -152,15 +152,15 @@ public class BallActivity extends Activity {
         		if(data[i][j]==1)
         		{
         			screenlist.get(i*length+j).setFalg(true);
-        			System.out.print("■");
+//        			System.out.print("■");
         		}
         		else
     			{
         			screenlist.get(i*length+j).setFalg(false);
-        			System.out.print(" ");
+//        			System.out.print(" ");
     			}
 			}
-        	System.out.print("\n");
+//        	System.out.print("\n");
         }
     	myCanvas.formChinese(screenlist);
 		
@@ -215,7 +215,15 @@ public class BallActivity extends Activity {
 		@Override  
         public boolean onDoubleTap(MotionEvent e) {  //双击
             //TODO  
-			myCanvas.random_update_ball_speed();
+//			myCanvas.random_update_ball_speed();
+			
+			if(str.length()>0)
+			{
+				startGame(str,0);//开始写字
+				index=0;
+//				handler.sendEmptyMessage(0);
+			}
+			
 			Log.i("BallActivity", "onDoubleTap");
 			
             return false;  
@@ -227,13 +235,6 @@ public class BallActivity extends Activity {
 			super.onLongPress(event);
 //			startGame(str);
 			
-	    	if(str.length()>0)
-			{
-				startGame(str,0);//开始写字
-//	    		myCanvas.readyToStop();
-				index=0;
-//				handler.sendEmptyMessage(0);
-			}
 //			Toast.makeText(BallActivity.this, "长安", Toast.LENGTH_SHORT).show();
 		}  
 		

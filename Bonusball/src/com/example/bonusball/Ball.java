@@ -1,4 +1,6 @@
 package com.example.bonusball;  
+
+import android.util.Log;
   
 public class Ball {  
   
@@ -12,6 +14,8 @@ public class Ball {
     private int color;  
     private boolean isStop=false;
     
+    private float tempV = (float) 0.5;
+    
     public Ball(int rgb,float r,float pX,float pY,float vX,float vY)  
     {  
         this.color=rgb;  
@@ -21,13 +25,6 @@ public class Ball {
         this.velocityX=vX;  
         this.velocityY=vY;  
     }  
-    
-    // ready to stop
-    public void changeTarget(float targetX, float targetY) {
-    	this.targetX = targetX;
-    	this.targetY = targetY;
-    }
-    
     
     public float getRadius()  
     {  
@@ -70,8 +67,6 @@ public class Ball {
     
     public void setVX(float newVX)  
     {  
-    	//如果速度为0 处理一下
-    	
         this.velocityX=newVX;  
     }  
     public void setVY(float newVY)  
