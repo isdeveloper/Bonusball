@@ -41,16 +41,16 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
     private int maxBallRadius=10;  
     private int maxBallSpeed=30;
     private CanvasThread myThread;  
-    private List<Ball> ballList;  //所有小球的集合
+    private List<Ball> ballList;//所有小球的集合
     private Paint backgroundPaint;  
     private Random mRandom;  
     //控制循环  
     boolean isLoop;  
     
-    int		mouseX,		mouseY;			// 当前鼠标坐标
-    int		mouseVX,	mouseVY;		// 鼠标速度
-    int		prevMouseX,	prevMouseY;		// 上次鼠标坐标
-    boolean	isMouseDown=false;				// 鼠标左键是否按下
+    int	mouseX, mouseY;// 当前鼠标坐标
+    int	mouseVX, mouseVY;// 鼠标速度
+    int	prevMouseX,	prevMouseY;// 上次鼠标坐标
+    boolean	isMouseDown=false;// 鼠标左键是否按下
   
     public CanvasView(Context context,int width,int height) {  
         super(context);   

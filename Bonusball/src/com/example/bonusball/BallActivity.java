@@ -28,6 +28,8 @@ import com.example.bonusball.hzk.ScreenCal;
 import com.example.bonusball.hzk.ScreenPoint;
 public class BallActivity extends Activity {  
   
+	private final static int BALL_NUM=100;//球的数量
+	
 	private GestureDetector gd;  //手势监听
 	
     private CanvasView myCanvas;  
@@ -36,8 +38,7 @@ public class BallActivity extends Activity {
   
     EditText inputEt=null;
     
-    private String str="郑翔";//显示的字
-    private int ballNum=100;//球的数量
+    private String str="中";//显示的字
     private int index=0;
     
     private Handler handler;
@@ -93,9 +94,9 @@ public class BallActivity extends Activity {
         gd=new GestureDetector(this,new OnDoubleClick());  
         
         /*
-         * 初始化个球
+         * 初始化指定个数的球
          */
-        for(int i=0;i<ballNum;i++)
+        for(int i=0;i<BALL_NUM;i++)
         	myCanvas.fireBall(); 
         
         
