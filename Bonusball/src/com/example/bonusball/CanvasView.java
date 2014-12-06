@@ -3,8 +3,12 @@ package com.example.bonusball;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.example.bonusball.ball.Ball;
+import com.example.bonusball.ball.BallForCH;
 import com.example.bonusball.hzk.ScreenPoint;
 
 import android.content.Context;
@@ -17,22 +21,13 @@ import android.view.SurfaceView;
   
 public class CanvasView extends SurfaceView implements SurfaceHolder.Callback  
 {  
-	/**
-	 * 判断 小球停止是的偏移量
-	 */
-	private final static int OFFSET=5;
-	
-	/**剩下这么多个球是 判断字已经画完*/
-	private final static int NAUGHTY_BALL_NUMBER=10;
-	
+
 	/**摩擦力*/
 	private final static float FRICTION=0.96f;		// 
 	
 	private final static String TAG = "CanvasView";
 	
 	private ArrayList<ScreenPoint> screenlist=null;
-	public int number=0;
-	public int totalNum=0;
 	//外部监听 绘制完成的接口
 	private OnCompleteListener myCompleteListener;
 	
@@ -43,9 +38,10 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
     private int maxBallRadius=10;  
     private int maxBallSpeed=30;
     private CanvasThread myThread;  
-    private List<Ball> ballList;//所有小球的集合
+    private List<BallForCH> ballList;//所有小球的集合
     private Paint backgroundPaint;  
     private Random mRandom;  
+    
     //控制循环  
     boolean isLoop;  
     
@@ -67,7 +63,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
         backgroundPaint = new Paint();  
         backgroundPaint.setColor(Color.BLACK);  
         isLoop = true;  
-        ballList=new CopyOnWriteArrayList<Ball>();  
+        ballList=new CopyOnWriteArrayList<BallForCH>();  
         mRandom=new Random();  
         
     	// 初始化鼠标变量
@@ -94,7 +90,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
         float speedX=(float) Math.cos(i)*mRandom.nextInt(34);
         float speedY=(float) Math.sin(i)*mRandom.nextInt(34);
         
-        ballList.add(new Ball(ranColor,tmpRadius,pX,pY,speedX,speedY));  
+        ballList.add(new BallForCH(ranColor,tmpRadius,pX,pY,speedX,speedY));  
     }
     
     public void fireBall(float startX,float startY,float velocityX,float velocityY)  
@@ -106,7 +102,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
         float randomRadius=mRandom.nextInt(maxBallRadius);  
         float tmpRadius=maxBallRadius/5.0>randomRadius?maxBallRadius:randomRadius;  
         
-        ballList.add(new Ball(ranColor,tmpRadius,startX,startY,velocityX,velocityY));  
+        ballList.add(new BallForCH(ranColor,tmpRadius,startX,startY,velocityX,velocityY));  
 //        System.out.println("Fire");  
     }  
   
@@ -164,23 +160,12 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
      * 改变所有球的位置
      * 根据每个球当前的速度
      * 如果碰到边界 反弹
-     * @param elapsedTimeMS
      */
-    private void updatePositions(double elapsedTimeMS) {  
+    private void updatePositions() {  
         // TODO Auto-generated method stub  
-//        float interval = (float) (elapsedTimeMS / 1000.0);   
-        float interval = (float) 0.1;  
+     
         //如果字写完了停止线程
-        //允许有两个球。。。迟迟跑不到位
-//        if(totalNum!=0&&number>totalNum-NAUGHTY_BALL_NUMBER)//停止线程
-//        {
-//        	myCompleteListener.onComplete();
-//        	number=0;
-//        	random_update_ball_speed();//随机打乱
-//        	
-//        }
-        
-        
+        //允许有两个球。。。迟迟跑不到位        
 
 		mouseVX    = mouseX - prevMouseX;
 		mouseVY    = mouseY - prevMouseY;
@@ -191,10 +176,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
 		float stirDist = screenHeight * 0.125f;
 		float blowDist = screenHeight * 0.5f;
         
-        
-        for(Ball b:ballList)  
+        for(BallForCH b:ballList)  
         {  
-
 			float x  = b.getX();
 			float y  = b.getY();
 			float vX = b.getVX();
@@ -202,17 +185,17 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
 			
 			float dX = x - mouseX;
 			float dY = y - mouseY; 
-			if(b.isStop())//当前球处于停止状态
+			if(b.isReadyToForm())//当前球处于构建汉字状态
         	{
 				dX = x - b.getTargetX();
 				dY = y - b.getTargetY();
+				
         	} 
 			
 			float d  = (float)Math.sqrt(dX * dX + dY * dY);
 			dX = d>0 ? dX / d : 0;
 			dY = d>0 ? dY / d : 0;
 			
-
         	
    			//鼠标按下监听 点击屏幕。。。
 			if (isMouseDown && d < blowDist)
@@ -221,7 +204,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
 				vX += dX * blowAcc + 0.5f - mRandom.nextFloat()/Integer.MAX_VALUE;
 				vY += dY * blowAcc + 0.5f - mRandom.nextFloat()/Integer.MAX_VALUE;
 			}
-			
+			//修改速度
+			//离触摸点越远速度越小
 			if (d < toDist)
 			{
 				float toAcc = (1 - (d / toDist)) * screenHeight * 0.0014f;
@@ -262,103 +246,87 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
 			b.setPosX(nextX);
 			b.setPosY(nextY);
         	
-        }  
-    }  
-    
-    public void readyToStop() {
-    	
-    	Random random = new Random();
-    	for(Ball b:ballList)  
-        { 
-    		b.setTargetX(random.nextInt(800));
-    		b.setTargetY(random.nextInt(1000));
-    		b.setStop(true);
-    		Log.i(TAG, " ready to stop " + b.getTargetX() + "," + b.getTargetY());
         }
-    }
-    
+    }  
+
     public void formChinese(ArrayList<ScreenPoint> list)
     {
     	screenlist=new ArrayList<ScreenPoint>();
+    	//取出需要填充的坐标点
     	for(ScreenPoint point : list) {
     		if(point.isFalg()) {
     			screenlist.add(point);
     		}
     	}
-    	number=0;//记录有多少个球停下来了
-    	
-    	totalNum=ballList.size();//球的总数
     	
     	int index = 0;
     	int size = screenlist.size();
     
-		for(Ball b : ballList) {
+    	//修改每个小球的target坐标
+    	//坐标值取自汉字坐标值列表
+		for(BallForCH b : ballList) {
 			ScreenPoint point = screenlist.get(index);
     		
     		b.setTargetX(point.getX());
     		b.setTargetY(point.getY());
-    		b.setStop(true);
-    		Log.i(TAG, " ready to stop " + b.getTargetX() + "," + b.getTargetY());
+    		b.setReadyToForm(true);
+//    		Log.i(TAG, " ready to stop " + b.getTargetX() + "," + b.getTargetY());
     		
     		index ++;
     		index = index % size;
-  
 		}
+		
+		
+		//开启一个定时任务 几秒后 结束画字 
+		stopFormChineseTimerTask(5000);
+		
     }
     
-    /**
-     * 改变小球当前的速度方向
-     * 根据目标地点
-     * 计算出当前的速度方向
-     * @param x
-     * @param y
-     */
-    public void update_ball_speed(float x2,float y2)
-    {
-
-        for(Ball b:ballList)  
+    private void stopFormChineseTimerTask(long when) {
+    	new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				formChineseComplete();
+			}
+		}, when);
+    }
+    
+    private void formChineseComplete(){
+    	if(myCompleteListener != null) {
+			myCompleteListener.onComplete();
+		}
+    	for(BallForCH b:ballList)  
         {  
-    		float x1=b.getX();
-        	float y1=b.getY();
-
-    		b.setVX((x2-x1)/2);
-    		b.setVY((y2-y1)/2);
+            b.setReadyToForm(false);//
         }
     }
-    
-    /**
-     * 随机改变
-     * @param x
-     * @param y
-     */
-    public void random_update_ball_speed()
-    {
-    	screenlist=null;//清空字
-    	
-        for(Ball b:ballList)  
-        {  
-        	
-        	float speedX=mRandom.nextFloat()>0.5? maxBallSpeed:-maxBallSpeed;
-            float speedY=mRandom.nextFloat()>0.5? maxBallSpeed:-maxBallSpeed;
-            
-            b.setStop(false);//停止的球也开始移动
-        	
-        	b.setVX(speedX);
-        	b.setVY(speedY);
+//    
+//    /**
+//     * 随机改变 球的坐标
+//     * 起到打乱球的作用
+//     * 并将球设为free状态
+//     */
+//    public void random_update_ball_speed()
+//    {
+//    	screenlist=null;//清空字
+//    	
+//        for(BallForCH b:ballList)  
+//        {  
+//        	float speedX=mRandom.nextFloat()>0.5? maxBallSpeed:-maxBallSpeed;
+//            float speedY=mRandom.nextFloat()>0.5? maxBallSpeed:-maxBallSpeed;
+//            
+//            b.setReadyToForm(false);//
 //        	
+//        	b.setVX(speedX);
+//        	b.setVY(speedY);
+//        }
+//    }
     
-        }
-    }
-    
-    /**
-     * 清空内存
-     */
+
     public synchronized void clear()
     {
-
 		isLoop=false;
     	ballList.clear();
-    	
     }
   
     private class CanvasThread extends Thread  
@@ -366,24 +334,16 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
         @Override  
         public void run()  
         {  
-  
             Canvas canvas=null;  
-            long previousFrameTime = System.currentTimeMillis();   
             while(isLoop)  
             { 
-                  
                 try{  
                     canvas = myHolder.lockCanvas(null);//获取画布  
                     synchronized( myHolder )  
                     {  
-//                        canvas.drawColor(Color.BLACK);  
-//                        long currentTime = System.currentTimeMillis();  
-//                        double elapsedTimeMS = currentTime - previousFrameTime;  
-                        updatePositions(0); // update game state  
+                        updatePositions(); 
                         if(canvas!=null)
                         	drawGameElements(canvas);  
-//                        previousFrameTime = currentTime; // update previous time  
-                        //System.out.println("run");  
                         try {
             				Thread.sleep(5);
             			} catch (Exception e) {
@@ -396,12 +356,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
                     if (canvas != null)   
                         myHolder.unlockCanvasAndPost(canvas);//解锁画布，提交画好的图像  
                 } // end finally  
-//                
-                
             }  
-           
         }  
-  
     }  
     
     /**

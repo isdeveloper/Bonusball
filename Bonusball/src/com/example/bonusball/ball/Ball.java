@@ -1,6 +1,5 @@
-package com.example.bonusball;  
+package com.example.bonusball.ball;  
 
-import android.util.Log;
   
 public class Ball {  
   
@@ -12,9 +11,6 @@ public class Ball {
     private float velocityY;  
     private float radius;  //°ë¾¶
     private int color;  
-    private boolean isStop=false;
-    
-    private float tempV = (float) 0.5;
     
     public Ball(int rgb,float r,float pX,float pY,float vX,float vY)  
     {  
@@ -73,14 +69,6 @@ public class Ball {
     {  
         this.velocityY=newVY;  
     }
-
-	public boolean isStop() {
-		return isStop;
-	}
-
-	public void setStop(boolean isStop) {
-		this.isStop = isStop;
-	}
 
 	public float getTargetX() {
 		return targetX;

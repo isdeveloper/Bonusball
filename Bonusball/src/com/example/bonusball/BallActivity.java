@@ -38,7 +38,7 @@ public class BallActivity extends Activity {
   
     EditText inputEt=null;
     
-    private String str="爱";//显示的字
+    private String str="一二三";//显示的字
     private int index=0;
     
     private Handler handler;
@@ -65,23 +65,25 @@ public class BallActivity extends Activity {
 			public void handleMessage(Message msg) {
 				// TODO Auto-generated method stub
 				super.handleMessage(msg);
-//				if(msg.what==1)
-//				{
-//					myCanvas.random_update_ball_speed();
+				switch (msg.what) {
+				case -1://表示结束
 					
+					break;
 
-				/**
-				 * 让球随机移动2秒之后再写下一个字
-				 */
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				default:
+					/**
+					 * 让球随机移动2秒之后再写下一个字
+					 */
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					startGame(str, msg.what);
+					break;
 				}
-				
-				startGame(str, msg.what);
-//				}
 			}
         	
         };
@@ -114,15 +116,16 @@ public class BallActivity extends Activity {
 				if(str.length()>1&&index!=(str.length()-1))//不止一个字
 				{
 					index++;
-					
-					
 					handler.sendEmptyMessage(index);
 				}
 				else
 				{
 					index=0;//记录g归0
 				}
-//				System.out.println("画完了 第"+index+"个 总共 "+str.length());
+				if(index == str.length()) {
+					handler.sendEmptyMessage(-1);
+				}
+				System.out.println("画完了 第"+index+"个 总共 "+str.length());
 				
 				
 			}
