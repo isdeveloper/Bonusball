@@ -28,7 +28,7 @@ import com.example.bonusball.hzk.ScreenCal;
 import com.example.bonusball.hzk.ScreenPoint;
 public class BallActivity extends Activity {  
   
-	private final static int BALL_NUM=100;//球的数量
+	private final static int BALL_NUM=200;//球的数量
 	
 	private GestureDetector gd;  //手势监听
 	
@@ -38,7 +38,7 @@ public class BallActivity extends Activity {
   
     EditText inputEt=null;
     
-    private String str="一二三";//显示的字
+    private String str="一二三四五六七八九十";//显示的字
     private int index=0;
     
     private Handler handler;
@@ -127,7 +127,6 @@ public class BallActivity extends Activity {
 				}
 				System.out.println("画完了 第"+index+"个 总共 "+str.length());
 				
-				
 			}
 		});
     }  
@@ -207,26 +206,17 @@ public class BallActivity extends Activity {
 		@Override
 		public boolean onSingleTapUp(MotionEvent event) {
 			// TODO Auto-generated method stub
-			
-	    	
-			//myCanvas.random_update_ball_speed();
-//			myCanvas.isMouseDown=true;
-//			Log.i("BallActivity", "onSingleTapUp");
 			return false;
 		}
 
 		@Override  
         public boolean onDoubleTap(MotionEvent e) {  //双击
             //TODO  
-//			myCanvas.random_update_ball_speed();
-			
 			if(str.length()>0)
 			{
 				startGame(str,0);//开始写字
 				index=0;
-//				handler.sendEmptyMessage(0);
 			}
-			
 			Log.i("BallActivity", "onDoubleTap");
 			
             return false;  
@@ -236,16 +226,8 @@ public class BallActivity extends Activity {
 		public void onLongPress(MotionEvent event) {//长按
 			// TODO Auto-generated method stub
 			super.onLongPress(event);
-//			startGame(str);
-			
-//			Toast.makeText(BallActivity.this, "长安", Toast.LENGTH_SHORT).show();
 		}  
 		
-		
-//        @Override  
-//        public boolean onDoubleTapEvent(MotionEvent e) {  
-//            return super.onDoubleTapEvent(e);  
-//        }  
     }  
     
 

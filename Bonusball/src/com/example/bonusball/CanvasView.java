@@ -7,7 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.example.bonusball.ball.Ball;
+import com.example.bonusball.ball.BaseBall;
 import com.example.bonusball.ball.BallForCH;
 import com.example.bonusball.hzk.ScreenPoint;
 
@@ -36,7 +36,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
     private int screenWidth; // width of the screen  
     private int screenHeight; // height of the screen  
     private int maxBallRadius=10;  
-    private int maxBallSpeed=30;
     private CanvasThread myThread;  
     private List<BallForCH> ballList;//所有小球的集合
     private Paint backgroundPaint;  
@@ -147,7 +146,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback
     {  
   
         canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);  
-        for(Ball b:ballList)  
+        for(BaseBall b:ballList)  
         {  
             ballPaint.setColor(b.getColor());  
             canvas.drawCircle(b.getX(),b.getY(),b.getRadius(),ballPaint);  
