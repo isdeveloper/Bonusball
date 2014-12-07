@@ -1,7 +1,7 @@
 package com.example.bonusball.ball;  
 
   
-public class Ball {  
+public class BaseBall {  
   
     private float posX;  
     private float posY;  
@@ -12,7 +12,7 @@ public class Ball {
     private float radius;  //°ë¾¶
     private int color;  
     
-    public Ball(int rgb,float r,float pX,float pY,float vX,float vY)  
+    public BaseBall(int rgb,float r,float pX,float pY,float vX,float vY)  
     {  
         this.color=rgb;  
         this.radius=r;  

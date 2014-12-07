@@ -1,6 +1,6 @@
 package com.example.bonusball.ball;
 
-public class BallForCH extends Ball {
+public class BallForCH extends BaseBall {
 
 	private boolean readyToForm = false;
 	
